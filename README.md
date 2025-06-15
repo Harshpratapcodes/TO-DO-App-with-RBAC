@@ -5,8 +5,25 @@ A powerful, full-stack To-Do application with **Role-Based Access Control (RBAC)
 ---
 
 ## 🎥 Demo
+> 📽️ [Watch Demo](assets/demo-todo.mp4)
+You can also go to assets folder and download the demo vodeo
 
-> 📽️ [Watch Demo](assets/demo todo.mp4)
+
+
+
+
+## 🎥 Demo GIFs
+![demotodo-MadewithClipchamp-ezgif com-video-to-gif-converter (3)](https://github.com/user-attachments/assets/84f05359-7097-4dd3-940b-08bbd415cd65)
+
+![demotodo-MadewithClipchamp-ezgif com-video-to-gif-converter (4)](https://github.com/user-attachments/assets/b51cdbc6-1294-499e-a894-479a96e2cf7c)
+
+![demotodo-MadewithClipchamp-ezgif com-video-to-gif-converter (5)](https://github.com/user-attachments/assets/be45c6c8-e77f-4a9c-b7c2-b4eceb519abc)
+
+![demotodo-MadewithClipchamp-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/b7599ad0-063f-4613-8c59-ad18d4d098ff)
+
+![demotodo-MadewithClipchamp-ezgif com-video-to-gif-converter (1)](https://github.com/user-attachments/assets/afaa9f0f-bda3-45b2-a605-8c9a6a16c940)
+
+![demotodo-MadewithClipchamp-ezgif com-video-to-gif-converter (2)](https://github.com/user-attachments/assets/519c72bb-b141-4c25-918f-1c3cac341e62)
 
 
 ---
