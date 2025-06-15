@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title> <!-- Dynamic Title -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style-signup.css"> <!-- Ensure file is inside 'public/css' -->
+</head>
+<body>
+
+    <img id="img-l" src="/images/image.png" alt="Login Illustration">
+
+    <div class="container-right">
+        <div class="signup-form-container">
+            <h2 class="text-center"><%= heading %></h2> <!-- Dynamic Heading -->
+            <p class="text-center">Access your tasks efficiently</p>
+        
+            <% if (error) { %>
+                <div class="alert alert-danger text-center"><%= error %></div>
+            <% } %>
+
+            <!-- Login Form -->
+            <form id="login-form" action="<%= isAdmin ? '/admin-login' : '/login' %>" method="POST">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block"><%= buttonText %></button>
+            </form>
+            
+            <p class="text-center mt-3">
+                <% if (isAdmin) { %>
+                    Are you a user? <a href="/login"> User Login</a>
+                <% } else { %>
+                    Are you an admin? <a href="/admin-login"> Admin Login</a>
+                <% } %>
+            </p>
+            <p class="text-center mt-3">
+                Haven't signed up yet?  <a href="/signup"> Sign Up </a>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/js/script.js"></script> 
+    <script>
+        setTimeout(() => {
+        const alertBox = document.querySelector(".alert-danger");
+        if (alertBox) {
+            alertBox.style.display = "none";
+        }
+    }, 3000); 
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+/* General Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #B0D8DA;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Push everything to the right */
+  overflow: hidden;
+  padding-right: 5%; /* Adds spacing from the right */
+}
+
+/* Image Styling (Left Side Overlapping) */
+#img-l {
+  height: 500px;
+  width: 800px;
+  position: absolute;
+  left: 10px;
+  top:150px;
+  z-index: 2; /* Ensure it stays above background but below the form */
+}
+
+/* Right Section */
+.container-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100vh;
+  width: 50%;
+  margin-right: 10%;
+}
+
+/* Sign-Up Form */
+.signup-form-container {
+  background: rgba(255, 255, 255, 0.85); /* Transparent white */
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  transform: translateX(-30px);
+  /* z-index: ; Keeps it above the image */
+}
+
+/* Form Styling */
+.signup-form-container h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #324b4c;
+}
+
+.signup-form-container p {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* Form Inputs */
+.form-group label {
+  font-weight: bold;
+  color: #324b4c;
+}
+
+.form-control {
+  border-radius: 5px;
+  padding: 10px;
+}
+
+/* Sign-Up Button */
+.btn-primary {
+  background-color: #324b4c;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.btn-primary:hover {
+  background-color: #183153;
+}
+
+/* Social Sign-Up Buttons */
+.social-signup {
+  margin-top: 15px;
+}
+
+.social-signup .btn {
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.alert:empty {
+  display: none; /* Hide alert if it has no content */
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  body {
+    justify-content: center; /* Center form on smaller screens */
+    padding-right: 0;
+  }
+
+  #img-l {
+    display: none; /* Hide image on smaller screens */
+  }
+
+  .container-right {
+    width: 90%;
+  }
+}

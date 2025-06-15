@@ -1,0 +1,18 @@
+
+<% if (session.permissions && session.permissions.includes('get_admin')) { %>
+<a href="/admin-management/admins" class="nav-link <%= currentUrl.startsWith('/admin-management') ? 'active' : '' %>">
+    <i class="fas fa-user-shield"></i> <span>Admin Management</span>
+</a>
+<% } %>
+
+<% if (session.permissions && session.permissions.includes('get_user')) { %>
+<a href="/user-management/users" class="nav-link <%= currentUrl.startsWith('/user-management') ? 'active' : '' %>">
+    <i class="fas fa-users"></i> <span>User Management</span>
+</a>
+<% } %>
+
+<% if (session.permissions && session.permissions.includes('get_role')) { %>
+<a href="/role-management/roles" class="nav-link <%= currentUrl.startsWith('/role-management') ? 'active' : '' %>">
+    <i class="fas fa-user-tag"></i> <span>Role Management</span>
+</a>
+<% } %>

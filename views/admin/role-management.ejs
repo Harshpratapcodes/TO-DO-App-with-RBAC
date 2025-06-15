@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role Management</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Header -->
+        <%- include('header') %>
+        
+        <div class="content-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav flex-column">
+                    <%- include('sidebar') %>
+                    <a href="/panel" class="nav-link"><i class="fas fa-list"></i> <span>Tasks</span></a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content-header d-flex justify-content-between align-items-center">
+                    <h2>Role Management</h2>
+                    <div class="date-display">
+                        <%= new Date().toDateString() %>
+                    </div>
+                    <% if (session.permissions && session.permissions.includes('create_role')) { %>
+                        <button class="btn create-btn" data-toggle="modal" data-target="#createRoleModal">
+                            <i class="fas fa-plus"></i> Create Role
+                        </button>
+                    <% } %>
+                </div>
+
+                <div class="container">
+                    <table id="roleTable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Permissions</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!--  Create Role Modal -->
+    <div class="modal fade" id="createRoleModal" tabindex="-1" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="createRoleModalLabel"><i class="fas fa-user-shield"></i> Create New Role</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/role-management/role/create" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="roleName" class="form-label">Role Name</label>
+                            <input type="text" class="form-control" id="roleName" name="roleName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="permissions" class="form-label">Select Permissions</label>
+                            <select class="form-select select2" id="permissions" name="permissions" multiple required>
+                                <% permissions.forEach(permission => { %>
+                                    <option value="<%= permission.id %>"><%= permission.permission %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Role</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!--  Edit Role Modal -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header bg-warning text-white">
+              <h5 class="modal-title" id="editRoleModalLabel"><i class="fas fa-edit"></i> Edit Role</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <form id="editRoleForm" action="" method="POST">
+              <div class="modal-body">
+                <!-- <input type="hidden" name="_method" value="PUT"> -->
+                  <input type="hidden" id="editRoleId" name="roleId">
+                  
+                  <div class="mb-3">
+                      <label for="editRoleName" class="form-label">Role Name</label>
+                      <input type="text" class="form-control" id="editRoleName" name="roleName" required>
+                  </div>
+
+                  <div class="mb-3">
+                      <label for="editPermissions" class="form-label">Select Permissions</label>
+                      <select class="form-select select2" id="editPermissions" name="permissions" multiple required>
+                          <% permissions.forEach(permission => { %>
+                              <option value="<%= permission.id %>"><%= permission.permission %></option>
+                          <% }) %>
+                      </select>
+                  </div>
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Update Role</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+    // Initialize DataTable
+    let table = $('#roleTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/role-management/roles/data',
+            type: 'GET',
+            dataSrc: 'data'
+        },
+        columns: [
+            { data: 'role' },
+            { 
+                data: 'Permissions',
+                render: function(data) {
+                    return data.length 
+                        ? data.map(p => `<span class="badge badge-info">${p.permission}</span>`).join(' ')
+                        : '<span class="text-muted">No permissions</span>';
+                }
+            },
+            {
+                data: 'id',
+                render: function(data, type, row) {
+                    return `
+                        <button type="button" class="btn btn-warning btn-sm edit-role-btn" 
+                            data-id="${row.id}" 
+                            data-role="${row.role}" 
+                            data-permissions='${JSON.stringify(row.Permissions)}'>
+                            <i class="fas fa-pencil-alt"></i>
+                        </button> 
+                    `;
+                }
+            },
+            {
+                data: 'id',
+                render: function(data, type, row) {
+                    return `
+                         <button type="button" class="btn btn-danger btn-sm delete-role-btn" 
+                            data-id="${row.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                }
+            } 
+        ]
+    });
+
+    $(document).on('click', '.edit-role-btn', function () {
+    let roleId = $(this).data('id'); // Role ID
+    let roleName = $(this).data('role'); // Role Name
+    let permissions = $(this).data('permissions'); // Permissions JSON
+
+    let permissionIds = permissions.map(p => p.id); // Extract permission IDs
+
+    // Populate form fields
+    $('#editRoleId').val(roleId);
+    $('#editRoleName').val(roleName);
+    $('#editPermissions').val(permissionIds).trigger('change');
+
+    // Open modal
+    $('#editRoleModal').modal('show');
+});
+
+//  Handle AJAX Update Request
+$('#editRoleForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    let roleId = $('#editRoleId').val();
+    let formData = $(this).serialize(); // Serialize form data
+
+    $.ajax({
+        url: `/role-management/role/edit/${roleId}`,
+        type: 'POST', 
+        data: formData,
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (response) {
+            alert('Role updated successfully!');
+            $('#editRoleModal').modal('hide');
+            $('#roleTable').DataTable().ajax.reload(null, false); // Refresh DataTable
+        },
+        error: function (xhr) {
+            console.error("Error:", xhr.responseText);
+            alert('Error updating role: ' + xhr.responseText);
+        }
+    });
+});
+
+
+    // Handle Delete Button Click
+    $(document).on('click', '.delete-role-btn', function () {
+        let roleId = $(this).data('id');
+        if (confirm('Are you sure you want to delete this role?')) {
+            $.ajax({
+                url: `/role-management/role/delete/${roleId}`,
+                type: 'POST',
+                success: function (response) {
+                    alert('Role deleted successfully!');
+                    table.ajax.reload(); // Reload DataTable after deletion
+                },
+                error: function (xhr) {
+                // Try to parse error message from server
+                let errorMessage = "An error occurred!";
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMessage = xhr.responseJSON.error; // JSON response from server
+                } else if (xhr.responseText) {
+                    errorMessage = xhr.responseText; // Plain text response
+                }
+                alert(errorMessage);
+            }
+            });
+        }
+    });
+
+    //  Initialize Select2
+    $('.select2').select2({
+        placeholder: "Select permissions",
+        width: '100%',
+        allowClear: true
+    });
+});
+
+
+    </script>
+</body>
+</html>
